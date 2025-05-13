@@ -1,0 +1,176 @@
+*{
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+
+.layout{
+  display: grid;
+  grid-template-columns: 22% 78%;
+}
+
+/* 568px
+
+666px
+
+768px
+
+1024px 
+
+1300px*/
+ul{
+  list-style-type: none;
+}
+/* small screens */
+@media (max-width:768px){
+  aside{
+     display: flex;
+  justify-content: space-between;
+  align-items: center;
+    height: 30px;
+
+  }
+   aside nav{
+    margin-top: 0px;
+    display:flex;
+   justify-items: space-around;
+  }
+  .layout{
+  display: block;
+
+
+
+}
+
+.dashboard{
+    min-height: 80vh;
+}
+
+.valve-control{
+  max-width: 100%;
+}}
+
+/* medium and large screens */
+@media (min-width:769px){
+  aside{
+  height: 100vh;
+
+
+  }
+ aside nav{
+    margin-top: 70px;}
+  
+  
+
+}
+
+/* @media (min-width:768px)and(max-width:1024px){
+  .layout{
+  grid-template-columns: 50% 50%;
+} 
+}*/
+aside{
+  background-color:#111827;
+  color:white;
+  padding :32px;
+}
+aside h2{
+  font-size: 1.5 rem;
+  font-weight: 700;
+}
+
+aside nav a{
+  display: block;
+ text-decoration: none;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* dashboard styling  */
+.dashboard{
+display: flex;
+flex-direction: column;
+gap:2rem;
+padding:35px;
+background-color: #f9fafa;
+}
+.dashboard header{
+  color:#111827;
+  display: flex;
+  justify-content: space-between;
+}
+.dashboard header span{
+  color:#1f2937;
+  font-size: 17px;
+}
+
+.status-cards{
+margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
+}
+.card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:24px;
+text-align: center;
+border: solid #ddd 1px;
+border-radius: 10px;  
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+
+}
+.card h3{
+  color:#6b7280;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.card .reading{
+  color:#10b981;
+  font-size: 2.5rem;
+  font-weight: 700;
+
+}
+.card  small{
+  display: block;
+  margin-top: 30px;
+  color:#6b7280;
+}
+
+/* //valve control  */
+
+ .valve-control{
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.valve-control select ,
+.valve-control button {
+  width: 100%;
+}
+.valve-control select{
+  display: block;
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-size: 17px;
+  margin-top: 20px;
+  border-radius: 4px;
+
+}
+
+.valve-control button{
+  margin-top: 13px;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background-color: #10b981;
+   border: 1px solid #ddd;
+     border-radius: 4px;
+     padding: 10px;
+}
