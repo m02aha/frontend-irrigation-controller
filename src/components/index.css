@@ -143,7 +143,12 @@ border-radius: 10px;
 }
 
 /* //valve control  */
-
+.controlers{
+  /* margin-top: 50px; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap:2rem;
+}
  .valve-control{
   max-width: 420px;
   display: flex;

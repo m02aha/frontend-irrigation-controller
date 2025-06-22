@@ -1,8 +1,10 @@
 import { useState,useEffect } from 'react'
+import { createSessionStorage } from 'react-router-dom';
 
 import './index.css'
 
-
+// api link:
+// https://sfg-irrigation-web-app.onrender.com/api/v0/device/status
 
 function App() {
 
@@ -30,48 +32,107 @@ function Sidebar(){
   </aside>);
 }
 function Dashboard(){
+const [valveisOpened, setvalve]=useState(false);
+const [moisture,setMoisture]=useState(0);
+const [temp,setTemp]=useState(0);
+const [dstatus,setdstatus]=useState('nan');
 
-  return (<div class="dashboard">
+//fetch current valve status from backend
+useEffect(()=>{
+async function fetchStatus(){
+  try{
+    const res=await fetch('https://sfg-irrigation-web-app.onrender.com/api/v0/device/status')
+    const data=await res.json();
+ console.log(data);
+    setdstatus(data.status);
+
+  }catch(error){
+    console.log(error);
+  }
+
+}
+
+ fetchStatus();
+} ,[]);
+
+//send opening/closing request 
+useEffect(()=>{
+  const valvereq=valveisOpened?'OPEN':'CLOSED';
+  
+  async function updateValve(){
+    if (!navigator.onLine) {
+    console.warn("You're offline. Cannot send PATCH request.");
+    return;
+  }
+    try{
+const res=await fetch('https://sfg-irrigation-web-app.onrender.com/api/v0/device/status',{
+  method:'PATCH',
+headers:{
+  "Content-Type": "application/json",     
+    "Accept": "application/json"   
+},
+  body:JSON.stringify({
+ status:valvereq
+  })
+});
+const data= await res.json();
+// console.log(data.status);
+ setdstatus(data.status);
+  }catch(error){
+
+    console.log(error);
+  }
+    }
+
+
+  updateValve();
+}
+
+  ,[valveisOpened]);
+
+  return (<div className="dashboard">
 <header>
   <h1>Dashboard</h1>
 
-  <div className="user"><span>hello, jack</span></div>
+  <div className="device-status"><span>valve is {dstatus}</span></div>
 </header>
 <div className="status-cards">
-<TempReadings/>
-<Moisture/>
+<TempReadings temp={temp}/>
+<Moisture moisture={moisture}/>
 </div>
-<ValveControl/>
+<div className='controlers'>
+  <AutoValveControl valveisOpened={valveisOpened} setvalve={setvalve}/>
+<ManualValveControl  valveisOpened={valveisOpened} setvalve={setvalve}/>
+</div>
 
   </div>);
 }
 
-function TempReadings(){
+function TempReadings({temp}){
   return (
     <div className="card">
       <div>
       <h3>Tempreture</h3>
-      <div className='reading'><span>41 C</span></div>
+      <div className='reading'><span>{temp} C</span></div>
       <small>last reading : 4 hours</small>
       </div>
     </div>
     );
 }
-function Moisture(){
+function Moisture({moisture}){
   return (
     <div className="card">
       <div>
            <h3>Moisture</h3>
-      <div className='reading'><span>20%</span></div>
+      <div className='reading'><span>{moisture}%</span></div>
       <small>last reading : 4 hours</small>
       </div>
     </div>
     );
 }
 
-function ValveControl(){
+function AutoValveControl({valveisOpened, setvalve}){
 const [valvetimer,setValveTimer]=  useState(10);
-const [valveisOpened, setvalve]=useState(false);
 const [countDown,setcountDown]=useState(0);
 
 
@@ -89,7 +150,8 @@ if (valveisOpened && valvetimer>0){
 intervalID=setInterval(() => {
   setcountDown((prevcount)=>{
     if(prevcount>0){
-      console.log(prevcount);
+      // console.log(prevcount);
+
       return prevcount-1;
 
     }else{
@@ -98,9 +160,9 @@ intervalID=setInterval(() => {
     }
   })
 
-console.log("valveisOpened:", valveisOpened);
-console.log("valvetimer:", valvetimer);
-console.log("Setting countdown to", valvetimer);
+// console.log("valveisOpened:", valveisOpened);
+// console.log("valvetimer:", valvetimer);
+// console.log("Setting countdown to", valvetimer);
 
 }, 1000);
 
@@ -115,7 +177,7 @@ console.log("Setting countdown to", valvetimer);
     
 
 
-// a second use effect that will close thevalve automatically when the 
+// a use effect that will close thevalve automatically when the 
 //countdown reaches 0
 
 useEffect(
@@ -130,7 +192,7 @@ if (countDown==0 && valveisOpened){
  return( <div className=" valve-control card">
 
 <h3>
-  vavle control
+  Vavle Timer
 </h3>
     <select value={valvetimer} 
     onChange={(e)=>(setValveTimer(Number(e.target.value)))}
@@ -144,6 +206,10 @@ if (countDown==0 && valveisOpened){
     </select>
 <button onClick={
   ()=>{
+      if (!navigator.onLine) {
+    alert("You're offline.");
+    return;
+  }
     if (!valveisOpened){
       if(valvetimer>0){
     setcountDown(valvetimer);
@@ -161,3 +227,15 @@ if (countDown==0 && valveisOpened){
 
   </div> );
 }
+
+//manual valve controll
+function ManualValveControl({setvalve}){
+  return(<div className=" valve-control card">
+<h3>Valve control</h3>
+<button onClick={()=>
+  setvalve(true)}>Open</button>
+<button onClick={()=>setvalve(false)}>Close</button>
+  </div>);
+}
+//disable a mode if the other is running , 
+//as user cannot click on the timer while using manual closing mode
