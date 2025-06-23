@@ -4,8 +4,8 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // c//import from dashboard page 
-import Login from './components/Login';//import login component from login page
-import Settings from './components/Settings';//import SETTINGS component from login page
+import Login from './components/login';//import login component from login page
+import Settings from './components/settings';//import SETTINGS component from login page
 import App from './components/App';//import ashboard page
 
 
