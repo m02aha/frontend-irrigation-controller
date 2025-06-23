@@ -31,11 +31,20 @@ function Sidebar(){
         </nav>
   </aside>);
 }
+
+function convertTime(jsontime){
+// console.log(jsontime);
+const jdate=new Date(jsontime);
+const hours=jdate.getHours();
+const minutes=jdate.getMinutes();
+return `${jdate.toDateString()} ${hours}:${minutes}`;
+}
 function Dashboard(){
 const [valveisOpened, setvalve]=useState(false);
 const [moisture,setMoisture]=useState(0);
 const [temp,setTemp]=useState(0);
 const [dstatus,setdstatus]=useState('nan');
+const [jsontime,settime]=useState('x hours');
 
 //fetch current valve status from backend
 useEffect(()=>{
@@ -45,6 +54,12 @@ async function fetchStatus(){
     const data=await res.json();
  console.log(data);
     setdstatus(data.status);
+    setTemp(data.temperature);
+    settime(()=>{
+      return convertTime(data.updated_on);
+    });
+   
+    //convert time stamp to date 
 
   }catch(error){
     console.log(error);
@@ -97,35 +112,35 @@ const data= await res.json();
   <div className="device-status"><span>valve is {dstatus}</span></div>
 </header>
 <div className="status-cards">
-<TempReadings temp={temp}/>
-<Moisture moisture={moisture}/>
+<TempReadings temp={temp} jsontime={jsontime}/>
+<Moisture moisture={moisture} jsontime={jsontime} />
 </div>
 <div className='controlers'>
-  <AutoValveControl valveisOpened={valveisOpened} setvalve={setvalve}/>
-<ManualValveControl  valveisOpened={valveisOpened} setvalve={setvalve}/>
+  <AutoValveControl valveisOpened={valveisOpened} setvalve={setvalve} jsontime={jsontime}/>
+<ManualValveControl  valveisOpened={valveisOpened} setvalve={setvalve} jsontime={jsontime}/>
 </div>
 
   </div>);
 }
 
-function TempReadings({temp}){
+function TempReadings({temp,jsontime}){
   return (
     <div className="card">
       <div>
       <h3>Tempreture</h3>
       <div className='reading'><span>{temp} C</span></div>
-      <small>last reading : 4 hours</small>
+      <small>{jsontime}</small>
       </div>
     </div>
     );
 }
-function Moisture({moisture}){
+function Moisture({moisture,jsontime}){
   return (
     <div className="card">
       <div>
            <h3>Moisture</h3>
       <div className='reading'><span>{moisture}%</span></div>
-      <small>last reading : 4 hours</small>
+      <small>jsontime={jsontime}</small>
       </div>
     </div>
     );
