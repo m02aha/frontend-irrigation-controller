@@ -140,7 +140,7 @@ function Moisture({moisture,jsontime}){
       <div>
            <h3>Moisture</h3>
       <div className='reading'><span>{moisture}%</span></div>
-      <small>jsontime={jsontime}</small>
+      <small>{jsontime}</small>
       </div>
     </div>
     );
