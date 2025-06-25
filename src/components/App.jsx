@@ -179,7 +179,7 @@ intervalID=setInterval(() => {
 // console.log("valvetimer:", valvetimer);
 // console.log("Setting countdown to", valvetimer);
 
-}, 1000);
+}, 60000);
 
 
 
@@ -237,7 +237,7 @@ if (countDown==0 && valveisOpened){
 
   }
 }>
-  { valveisOpened?`Close the valve (${countDown})`: 'Open valve'}
+  { valveisOpened?`Close the valve (${countDown} min remained)`: 'Open valve'}
   </button>
 
   </div> );
