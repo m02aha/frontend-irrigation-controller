@@ -194,7 +194,6 @@ else{
 //clear interval if timer reached 0
     // console.log('stop');
   //reset valvetimer after finishing
-    setValveTimer((valvetimer=>valvetimer));
 
    clearInterval(intervalID);
    setisOpen(false);//trigger closing the valve
@@ -253,8 +252,10 @@ if (intervalID){
       <option value={60}>{60} minutes</option>
     </select>
 <button onClick={()=>{
+    setcountDown(valvetimer);
  
 setisOpen(()=>true);
+
 
 }
 }>
