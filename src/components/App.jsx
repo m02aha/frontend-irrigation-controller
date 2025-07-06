@@ -1,18 +1,22 @@
 import { useState,useEffect } from 'react'
+
 import { createSessionStorage } from 'react-router-dom';
 
 import './index.css'
 
 // api link:
-// https://sfg-irrigation-web-app.onrender.com/api/v0/device/status
+
+const apiurl='https://sfg-irrigation-web-app.onrender.com/api/v0/device/status'
+// 
+// const apiurl='dummy';
 
 function App() {
-
+const [dstatus,setdstatus]=useState('loading');
 
   return (
     <div class="layout">
     <Sidebar/>
-    <Dashboard/>
+    <Dashboard dstatus={dstatus} setdstatus={setdstatus}/>
         
     </div>
   );
@@ -32,6 +36,7 @@ function Sidebar(){
   </aside>);
 }
 
+//convert json timestamp to a readble date
 function convertTime(jsontime){
 // console.log(jsontime);
 const jdate=new Date(jsontime);
@@ -39,71 +44,37 @@ const hours=jdate.getHours();
 const minutes=jdate.getMinutes();
 return `${jdate.toDateString()} ${hours}:${minutes}`;
 }
-function Dashboard(){
-const [valveisOpened, setvalve]=useState(false);
+
+
+
+function Dashboard({dstatus,setdstatus}){
 const [moisture,setMoisture]=useState(0);
 const [temp,setTemp]=useState(0);
-const [dstatus,setdstatus]=useState('nan');
+
 const [jsontime,settime]=useState('x hours');
 
-//fetch current valve status from backend
+//fetch current valve status from backend then store it in dstatus
 useEffect(()=>{
-async function fetchStatus(){
-  try{
-    const res=await fetch('https://sfg-irrigation-web-app.onrender.com/api/v0/device/status')
+async function fetchData(){
+try{
+      const res=await fetch(apiurl);
     const data=await res.json();
- console.log(data);
-    setdstatus(data.status);
+    console.log('from api func',data);
+
+      setdstatus(data.status);
     setTemp(data.temperature);
     settime(()=>{
+      //convert time stamp to date 
       return convertTime(data.updated_on);
     });
-   
-    //convert time stamp to date 
 
   }catch(error){
     console.log(error);
   }
 
 }
-
- fetchStatus();
+  fetchData();
 } ,[]);
-
-//send opening/closing request 
-useEffect(()=>{
-  const valvereq=valveisOpened?'OPEN':'CLOSED';
-  
-  async function updateValve(){
-    if (!navigator.onLine) {
-    console.warn("You're offline. Cannot send PATCH request.");
-    return;
-  }
-    try{
-const res=await fetch('https://sfg-irrigation-web-app.onrender.com/api/v0/device/status',{
-  method:'PATCH',
-headers:{
-  "Content-Type": "application/json",     
-    "Accept": "application/json"   
-},
-  body:JSON.stringify({
- status:valvereq
-  })
-});
-const data= await res.json();
-// console.log(data.status);
- setdstatus(data.status);
-  }catch(error){
-
-    console.log(error);
-  }
-    }
-
-
-  updateValve();
-}
-
-  ,[valveisOpened]);
 
   return (<div className="dashboard">
 <header>
@@ -116,8 +87,9 @@ const data= await res.json();
 <Moisture moisture={moisture} jsontime={jsontime} />
 </div>
 <div className='controlers'>
-  <AutoValveControl valveisOpened={valveisOpened} setvalve={setvalve} jsontime={jsontime}/>
-<ManualValveControl  valveisOpened={valveisOpened} setvalve={setvalve} jsontime={jsontime}/>
+
+<ManualValveControl dstatus={dstatus} setdstatus={setdstatus}/>
+<TimerValveControl dstatus={dstatus} setdstatus={setdstatus}/>
 </div>
 
   </div>);
@@ -146,72 +118,133 @@ function Moisture({moisture,jsontime}){
     );
 }
 
-function AutoValveControl({valveisOpened, setvalve}){
+// api fetching function 
+
+async function updateVal(action){
+  try{
+    const res=await fetch(apiurl,
+    {
+       method:'PATCH',
+       headers:{
+          "Content-Type": "application/json",     
+          "Accept": "application/json"   },
+       body:JSON.stringify({
+       status:action })
+     });
+
+    const data= await res.json();
+   
+    return data;
+
+  }catch(error){
+    console.log(error);
+  }
+
+}
+
+
+//manual valve controll
+function ManualValveControl({setdstatus,dstatus}){
+//click triggers updateval function
+async function handleclick(action){
+const res=await updateVal(action);
+console.log(res);
+setdstatus(res.status);
+}
+
+  return(<div className=" valve-control card">
+<h3>Valve control</h3>
+<button onClick={()=>handleclick('OPEN')}>Open</button>
+<button onClick={()=>handleclick('CLOSED')}>Close</button>
+  </div>);
+}
+
+function TimerValveControl({setdstatus}){
+
+const [isopen,setisOpen]=useState('notset');
 const [valvetimer,setValveTimer]=  useState(10);
-const [countDown,setcountDown]=useState(0);
+const [countDown,setcountDown]=useState(10);
+
+async function sendValveReq(action){
+const res=await updateVal(action);
+console.log(res);
+setdstatus(res.status);
 
 
-//count downtimer 
-useEffect(
- ()=>{
+}
+
+// effect to run countdown
+useEffect(()=>{
 let intervalID;
+//if valve timer opened 
+if (isopen===true){
 
-//run countdownif valve is opened
-if (valveisOpened && valvetimer>0){
+  //set countdown to valve timer : step
+sendValveReq('OPEN');
 
-// // initial countdown
-// setcountDown(valvetimer);
 
-intervalID=setInterval(() => {
-  setcountDown((prevcount)=>{
-    if(prevcount>0){
-      // console.log(prevcount);
-
-      return prevcount-1;
-
-    }else{
-      clearInterval(intervalID);
-      return 0;
+intervalID=setInterval(()=>{
+  setcountDown(
+  (prev)=>{
+    if(prev>1){
+    console.log('from interval',prev);
+    return prev-1;
     }
-  })
+else{
+//clear interval if timer reached 0
+    // console.log('stop');
+  //reset valvetimer after finishing
+    setValveTimer((valvetimer=>valvetimer));
 
-// console.log("valveisOpened:", valveisOpened);
-// console.log("valvetimer:", valvetimer);
-// console.log("Setting countdown to", valvetimer);
-
-}, 60000);
+   clearInterval(intervalID);
+   setisOpen(false);//trigger closing the valve
 
 
-
-}
-
-  return()=>clearInterval(intervalID);
-
-  }
-,[valveisOpened,valvetimer]);
+  return 0; //reset coundown to 0
+    }
     
-
-
-// a use effect that will close thevalve automatically when the 
-//countdown reaches 0
-
-useEffect(
-  ()=>{
-if (countDown==0 && valveisOpened){
-  setvalve(false);
-}
   }
-  ,[countDown, valveisOpened]);
+)
 
-  //the component UI
- return( <div className=" valve-control card">
+},60000);
+}
+
+
+if (isopen === false) {
+    sendValveReq('CLOSED');
+    setcountDown(valvetimer); // reset countdown when manually closed
+ 
+  }
+
+
+
+return ()=>{
+if (intervalID){
+
+  clearInterval(intervalID);
+
+}
+}
+
+},[isopen]);
+
+
+
+
+
+
+
+
+
+
+  return(<div className=" valve-control card">
 
 <h3>
   Vavle Timer
 </h3>
     <select value={valvetimer} 
     onChange={(e)=>(setValveTimer(Number(e.target.value)))}
-    disabled={valveisOpened}>
+  >
       <option value={10}>{10} minutes</option>
       <option value={20}>{20} minutes</option>
       <option value={30}>{30} minutes</option>
@@ -219,38 +252,21 @@ if (countDown==0 && valveisOpened){
       <option value={50}>{50} minutes</option>
       <option value={60}>{60} minutes</option>
     </select>
-<button onClick={
-  ()=>{
-      if (!navigator.onLine) {
-    alert("You're offline.");
-    return;
-  }
-    if (!valveisOpened){
-      if(valvetimer>0){
-    setcountDown(valvetimer);
-    setvalve(true);
-      }
-  }else{
-  setvalve( false);
+<button onClick={()=>{
+ 
+setisOpen(()=>true);
 
-  }
-
-  }
-}>
-  { valveisOpened?`Close the valve (${countDown} min remained)`: 'Open valve'}
-  </button>
-
-  </div> );
 }
-
-//manual valve controll
-function ManualValveControl({setvalve}){
-  return(<div className=" valve-control card">
-<h3>Valve control</h3>
-<button onClick={()=>
-  setvalve(true)}>Open</button>
-<button onClick={()=>setvalve(false)}>Close</button>
+}>
+  {isopen===true?
+  
+ countDown>0?`close (${countDown} minutes remained) `
+  :'open' :'open'}
+  </button>
+<button onClick={()=>setisOpen(false)}>Close</button>
   </div>);
 }
+
+
 //disable a mode if the other is running , 
 //as user cannot click on the timer while using manual closing mode
