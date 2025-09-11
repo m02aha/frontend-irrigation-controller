@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme{
+    --color-primary:#5ACCC1;
+
+--color-sec-close:#BF3A3A;
+--color-icon-moisture-bg: rgb(5 217 255 /0.15);
+--color-icon-temp-bg: rgb(255 133 10 /0.12);
+--color-icon-warning-bg: rgb(243 90 65 /0.34);
+--color-icon-good-bg: rgb(221 234 65 /0.34);
+--color-graph-outline: #60B384;
+--color-card-bg: #FFFFFF;
+--color-sidenav-bg :#003F22;
+--color-nav-cliked-link:rgb(102 121 128 /0.37);
+
+--color-bg-primary:#FF5F7FA;
+--color-border-primary:#E4E7EC;    
+
+
+        
+
+--color-text-primary:#000000;;
+--color-text-secondary:#737070;
+--color-nav-text:#FFFFFF;
+ --color-text-tertiary:#504E4E;
+
+    --font-family-base: 'Mulish', sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, monospace;
+    
+/* 12 14 16 18 20 24 32  36 40 48  */
+/* | `text-xs`   | 0.75rem  | 12px  |
+| ----------- | -------- | ----- |
+| `text-sm`   | 0.875rem | 14px  |
+| `text-base` | 1rem     | 16px  |
+| `text-lg`   | 1.125rem | 18px  |
+| `text-xl`   | 1.25rem  | 20px  |
+| `text-2xl`  | 1.5rem   | 24px  |
+| `text-3xl`  | 1.875rem | 30px  |
+| `text-4xl`  | 2.25rem  | 36px  |
+| `text-5xl`  | 3rem     | 48px  | */
+
+  --text-3xl:2rem; /*32px*/
+  --text-41xl:2.5rem; /*40px*/
+
+/*   
+| `rounded`     | `4px`  | button action    |
+| ------------- | ------ | ---------------- |
+|               |        |                  |
+| `rounded-lg`  | `8px`  | navigation links |
+| `rounded-2xl` | `16px` | cards            | */
+
+
+
+    
+}
+
+@layer components{
+.container{ 
+    max-width: 100% !important;
+    margin-left:auto;
+    margin-right:auto;}
+
+
+  /* mobile screen default */
+  .container{
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+ /* tablet */
+  @media (min-width: 768px) {
+    .container{
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+   
+  }
+
+  /* destop <1024px */
+   @media (min-width: 1024px) {
+    .container{
+      padding-left: 2.75rem;
+      padding-right: 2.75rem;
+    }
+   
+  }
+  /* destop <1024px */
+   @media (min-width: 1440px) {
+    .container{
+     min-width: 1104px;
+    max-width: 1280px;
+      }
+   
+  }
+}
