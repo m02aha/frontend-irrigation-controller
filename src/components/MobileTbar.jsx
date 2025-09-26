@@ -7,7 +7,7 @@ export default
 function MobileTbar({setIsNavOpen,isNavOpen}) {
 {/* the top bar is hidden in tablets and larger screens */}
   return ( <> 
-     <div className="w-full bg-bcg-primary h-16 px-4 md:hidden  flex items-center justify-between">
+     <div className="w-full bg-white h-16 px-4 md:hidden  flex items-center justify-between">
 
    <div onClick={()=>setIsNavOpen(true)}>
     <img src={humburger} alt="menu" className='w-6 h-6 cursor-pointer' />

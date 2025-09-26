@@ -67,12 +67,12 @@ export default function AsideNav({isNavOpen,setIsNavOpen}){
 
       {/* logo and name */}
       
-       < div className='px-6 py-6 mx-auto flex  items-center 
+       < div className='px-6 py-4 mx-auto flex  items-center 
 md:justify-center  justify-between' >
  <div className='flex gap-2 items-center 
 md:justify-center '>
   <img src={sfg} alt="logo" />
-  <span className='text-white text-2xl font-semibold md:hidden xl:block' > SFG group</span>
+  <span className='text-white text-xl font-semibold md:hidden xl:block' > SFG group</span>
 </div>
 
  <div>
