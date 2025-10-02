@@ -4,7 +4,7 @@ import calender from "../assets/calender.svg";
 export default 
 // top bar in mobile screens
 
-function MobileTbar({setIsNavOpen,isNavOpen}) {
+function MobileTbar({setIsNavOpen,isNavOpen,convertedDate}) {
 {/* the top bar is hidden in tablets and larger screens */}
   return ( <> 
      <div className="w-full bg-white h-16 px-4 md:hidden  flex items-center justify-between">
@@ -14,7 +14,9 @@ function MobileTbar({setIsNavOpen,isNavOpen}) {
   </div>
 
       <h1 className="  font-semibold text-third text-xl">Irrigation controller - Sudan A1</h1>
-      <div className=" p-1.5  flex justify-center items-center rounded-full border bg-[#fff] border-[#8b8a8a] cursor-pointer">
+      <div className=" p-1.5  flex justify-center items-center rounded-full border bg-[#fff] border-[#8b8a8a] cursor-pointer"
+         onClick={() => window.location.reload()}
+      >
   
            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
            <g clip-path="url(#clip0_1_359)">
@@ -36,7 +38,7 @@ function MobileTbar({setIsNavOpen,isNavOpen}) {
 
           <div className=" md:hidden ml-4 border-border-primary rounded-b-sm bg-white border p-2 mt-4  w-max flex gap-2 items-center text-text-labels ">
             <img className="text-gray w-4 h-4" src={calender} alt="calendar" />
-         <p className='text-gray '>last updated on August 12, 2021</p>
+         <p className='text-gray '>last updated on {convertedDate}</p>
          </div>
 
 </>);

@@ -17,7 +17,7 @@ export default function SensorReadings({iconSvg, iconBg, title,SensorData,update
                       <div>
                   <h2 className="  text-txt-primary  font-medium text-base  xl:text-base 2xl:text-lg">{title}</h2>
                   <p className="text-gray  text-sm  2xl:text-base  mt-0.5">
-                    {updated} ago
+                    {updated} 
                    </p>
                    </div>
 

@@ -9,10 +9,11 @@
     --color-primary:#5ACCC1;
 
 --color-sec-close:#BF3A3A;
---color-icon-moisture-bg: rgb(5 217 255 /0.15);
---color-icon-temp-bg: rgb(255 133 10 /0.12);
---color-icon-warning-bg: rgb(243 90 65 /0.34);
---color-icon-good-bg: rgb(221 234 65 /0.34);
+--color-icon-moisture-bg: rgb(5 217 255 /0.07);
+--color-icon-temp-bg: rgb(255 133 10 /0.05);
+--color-red-warning-bg: rgba(234, 90, 65, 0.34);
+--color-green-good-bg: rgba(121, 234, 65, 0.34);
+--color-yellow-warning-bg: rgba(235, 222, 87, 0.34);
 --color-graph-outline: #60B384;
 --color-card-bg: #FFFFFF;
 --color-sidenav-bg :#003F22;
@@ -61,7 +62,9 @@
 }
 
 @layer components{
-
+.icon-good-bg { background-color: var(--color-green-good-bg); }
+.icon-warning-r-bg { background-color: var(--color-red-warning-bg); }
+.icon-warning-y-bg { background-color: var(--color-yellow-warning-bg); }
   .btn-border{
     border: 1px solid ;
   }
