@@ -28,7 +28,7 @@
 --color-third:#333333;
 --color-text-secondary:#737070;
 --color-nav-text:#FFFFFF;
- --color-text-tertiary:#504E4E;
+ --color-txt-status:#504E4E;
  --color-gray:#6B7280;
  --font-family-base: 'Mulish', sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, monospace;
@@ -61,6 +61,10 @@
 }
 
 @layer components{
+
+  .btn-border{
+    border: 1px solid ;
+  }
 .container{ 
     max-width: 100% !important;
     margin-left:auto;

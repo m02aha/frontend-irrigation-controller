@@ -2,6 +2,7 @@ import MobileTbar from "./MobileTbar";
 import TopBar from "./TopBar";
 import Overview from "./Overview";
 import SensorReadings from "./SensorReadings";
+import ValveControl from "./ValveControl"; 
 import thermo from "../assets/thermo.svg";
 import rain from "../assets/rain.svg";
 
@@ -39,7 +40,7 @@ return(
        <div >
          <h2 className="  mt-2 md:mt-4  text-lg  xl:hidden text-gray">Valve control</h2>
         <div className="card w-full mt-3.5 md:mt-4  xl:mt-0">
-      valve control
+      <ValveControl status="Closed" />
   
       </div>
        </div>
