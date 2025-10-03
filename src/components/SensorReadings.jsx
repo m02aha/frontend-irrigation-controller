@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
+import {formatUpdatedAgo} from "./formatUpdated";
+
+export default function SensorReadings({iconSvg, iconBg, title,SensorData,updated_on}) {
+
+   const [updated,setUpdated]=useState(()=>formatUpdatedAgo(updated_on));
+   
 
 
+  useEffect(
 
-export default function SensorReadings({iconSvg, iconBg, title,SensorData,updated}) {
+    ()=>{
+   setUpdated(formatUpdatedAgo(updated_on))
+      const interval=setInterval(()=>{
+   setUpdated(formatUpdatedAgo(updated_on));
+      },30000)
 
+      return ()=>clearInterval(interval);
+    }
+    
+    ,[updated_on])
 
 
     return(
