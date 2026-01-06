@@ -6,6 +6,7 @@ import SensorReadings from "./SensorReadings";
 import ValveControl from "./ValveControl"; 
 import thermo from "../assets/thermo.svg";
 import rain from "../assets/rain.svg";
+import wave from "../assets/wave.svg";
  import { useEffect, useState } from "react";
 
  import { convertDate } from "./convertDate";
@@ -117,9 +118,9 @@ return(
         
          <div className=" mt-3 xl:mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4 md:gap-y-6 ">
           
-          <SensorReadings iconSvg={rain} iconBg="bg-icon-moisture-bg" title="Soil moisture" SensorData={moisture}  updated_on={updated_on}/>
+          <SensorReadings iconSvg={rain} iconBg="bg-icon-moisture-bg" moistureBg={wave} moisture title="Soil moisture" SensorData={moisture}  updated_on={updated_on}/>
           
-          <SensorReadings iconSvg={thermo} iconBg="bg-icon-temp-bg" title="Temperature" SensorData={temp}  updated_on={updated_on}/>
+          <SensorReadings iconSvg={thermo} iconBg="bg-icon-temp-bg"  moistureBg={null} title="Temperature" SensorData={temp}  updated_on={updated_on}/>
 
 
           </div>
