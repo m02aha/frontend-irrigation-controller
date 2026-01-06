@@ -136,7 +136,7 @@ return(
      
 
       </div>
-     <section className="container mt-4 md:mt-8 w-full max-w-5xl mx-auto ">
+     <section className="container  mt-4 md:mt-8 w-full max-w-5xl mx-auto ">
       
       <Graph  chartData={chartData}/>
 

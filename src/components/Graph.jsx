@@ -7,14 +7,22 @@ export function Graph({chartData}){
 
 return(
 
-    <div className=" card mt-4 md:mt-8 xl:mt-8 relative w-full h-[300px] sm:h-[400px] md:h-[500px] ">
-      
+    <div className=" card  mt-4 md:mt-8 xl:mt-8 relative w-full h-[300px] sm:h-[400px] md:h-[500px] flex flex-col p-6 md:p-7">
+     
+     {/* header  */}
       <div  className=" flex justify-between items-center mb-2 md:mb-4">
         <h2 className=" hidden md:block text-txt-primary  font-medium text-sm xl:text-sm 2xl:text-base"> Moisture Levels</h2>
           
       </div>
+
+      {/* end of header  */}
+
+      {/* the graph  */}
+      <div className="relative flex-1">
         <Line data={chartData} options={
          { 
+          responsive: true,
+            maintainAspectRatio: false,
           elements: {
            point: {
                radius: 0,
@@ -40,7 +48,7 @@ return(
                , grid: {
                 color: "#ffffff", // light gray grid
                 borderColor: "transparent", // hide border line
-            
+               
                   }
                 ,
                  ticks: {
@@ -85,6 +93,7 @@ return(
           }
 }
         }/>
+     </div>
     </div>
 );
 
