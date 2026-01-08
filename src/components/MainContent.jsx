@@ -128,7 +128,7 @@ return(
 
        <div >
          <h2 className="  mt-2 md:mt-4  text-lg  xl:hidden text-gray">Valve control</h2>
-        <div className="card w-full mt-3.5 md:mt-4  xl:mt-0">
+        <div className="card w-full mt-3.5 md:mt-4  xl:mt-0 xl:h-full">
       <ValveControl  popupOpen={popupOpen} setPopupOpen={setPopupOpen} vstatus={vstatus} setVstatus={setVstatus}setupdated={setupdated} setConvertedDate={setConvertedDate}/>
   
       </div>

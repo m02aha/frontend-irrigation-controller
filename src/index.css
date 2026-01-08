@@ -140,6 +140,8 @@
     .container{
      min-width: 1104px;
     max-width: 1280px;
+
+    max-height: 50%;
       }
    .card{
 
